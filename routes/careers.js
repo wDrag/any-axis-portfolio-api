@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
+const axios = require("axios");
 
 /* GET careers List. */
 
-router.get("/", function (req, res, next) {
+router.get("/", async function (req, res, next) {
   const CareersList = [
     {
       CategoryName: `Engineering & Trading`,
@@ -46,10 +47,10 @@ router.get("/", function (req, res, next) {
       ],
     },
   ];
-  res.send(CareersList);
+  res.status(200).send(CareersList);
 });
 
-router.get("/jobDetails", function (req, res, next) {
+router.get("/jobDetails", async function (req, res, next) {
   const { jobId } = req.query;
   const JobDetails = {
     JobTitle: "Senior Software Engineer",
@@ -63,6 +64,23 @@ router.get("/jobDetails", function (req, res, next) {
     AboutCompany:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laborum excepturi officiis repellat eveniet eaque dolores ipsam expedita corporis ducimus provident soluta rerum doloribus sunt, nulla quia nobis, delectus, nam fugit.",
   };
-  res.send(JobDetails);
+  res.status(200).send(JobDetails);
 });
+
+router.post("/apply", async function (req, res, next) {
+  const { formData } = req.body;
+  console.log("formData", formData);
+  try {
+    const response = await axios.post(
+      process.env.GOOGLE_APP_SCRIPT_URL,
+      formData
+    );
+    console.log("response", response.data);
+    res.status(200).send("Applied Successfully");
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).send("Failed to Apply");
+  }
+});
+
 module.exports = router;
