@@ -18,6 +18,10 @@ app.set("port", port);
 /**
  * Create HTTP server.
  */
+var server = http.createServer(app);
+server.on("listening", function () {
+  console.log("Server is live and listening on port " + port);
+});
 
 var server = http.createServer(app);
 

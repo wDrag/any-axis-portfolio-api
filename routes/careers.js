@@ -4,7 +4,7 @@ const axios = require("axios");
 
 /* GET careers List. */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async (req, res, next) => {
   const CareersList = [
     {
       CategoryName: `Engineering & Trading`,
@@ -50,7 +50,7 @@ router.get("/", async function (req, res, next) {
   res.status(200).send(CareersList);
 });
 
-router.get("/jobDetails", async function (req, res, next) {
+router.get("/jobDetails", async (req, res, next) => {
   const { jobId } = req.query;
   const JobDetails = {
     JobTitle: "Senior Software Engineer",
@@ -67,9 +67,12 @@ router.get("/jobDetails", async function (req, res, next) {
   res.status(200).send(JobDetails);
 });
 
-router.post("/apply", async function (req, res, next) {
+router.post("/apply", async (req, res, next) => {
   const { formData } = req.body;
   console.log("formData", formData);
+  if (verifyFormData(formData)) {
+    res.status(400).send("Invalid Form Data");
+  }
   try {
     const response = await axios.post(
       process.env.GOOGLE_APP_SCRIPT_URL,
